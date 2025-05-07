@@ -1,104 +1,158 @@
 ---
+// 导入组件
 import Search from "@/components/Search.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { menuLinks } from "@/site.config";
 ---
 
-<header class="group relative mb-16 flex items-center sm:ps-[4.5rem]" id="main-header">
-	<div class="flex sm:flex-col">
-		<a
-			aria-current={Astro.url.pathname === "/" ? "page" : false}
-			class="inline-flex items-center  hover:grayscale sm:relative sm:inline-block"
-			href="/"
-		>
-			<!-- 自定义图片 -->
-			<img
-				src="/411.jpg"
-				alt="Logo"
-				class="me-3 h-10 w-10 sm:absolute sm:start-[-5rem] sm:top-[-0.4rem] sm:me-0 sm:h-16 sm:w-16"
-			
-			<!-- 修改：首页标题 -->
-			<span class="text-xl font-bold sm:text-2xl">阿猫&小窝</span>
-		</a>
-		<nav
-			aria-label="Main menu"
-			class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-md bg-bgColor/[.85] py-4 text-accent shadow backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:items-center sm:divide-x sm:divide-accent sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
-			id="navigation-menu"
-		>
-			{
-				menuLinks.map((link) => (
-					<a
-						aria-current={Astro.url.pathname === link.path ? "page" : false}
-						class="px-4 py-4 underline-offset-2 sm:py-0 sm:hover:underline"
-						data-astro-prefetch
-						href={link.path}
-					>
-						{link.title}
-					</a>
-				))
-			}
-		</nav>
-	</div>
-	<Search />
-	<ThemeToggle />
-	<mobile-button>
-		<button
-			aria-expanded="false"
-			aria-haspopup="menu"
-			aria-label="Open main menu"
-			class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
-			id="toggle-navigation-menu"
-			type="button"
-		>
-			<svg
-				aria-hidden="true"
-				class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
-				fill="none"
-				focusable="false"
-				id="line-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
-				></path>
-			</svg>
-			<svg
-				aria-hidden="true"
-				class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 text-accent opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
-				class="text-accent"
-				fill="none"
-				focusable="false"
-				id="cross-svg"
-				stroke="currentColor"
-				stroke-width="1.5"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-			</svg>
-		</button>
-	</mobile-button>
+<!-- 主头部容器，添加了和风渐变色背景 -->
+<header 
+  class="group relative mb-16 flex items-center sm:ps-[4.5rem] bg-gradient-to-r from-[#fdf6e3] to-[#f5e6d3] shadow-lg"
+  id="main-header"
+>
+  <div class="flex sm:flex-col">
+    <!-- Logo区域，添加了和风边框 -->
+    <a
+      aria-current={Astro.url.pathname === "/" ? "page" : false}
+      class="inline-flex items-center hover:opacity-80 transition-opacity sm:relative sm:inline-block"
+      href="/"
+    >
+      <!-- 替换为日式风格猫咪Logo -->
+      <img
+        src="/assets/neko-logo.png"  // 建议使用手绘风格猫咪图片
+        alt="夏目风Logo"
+        class="me-3 h-10 w-10 sm:absolute sm:start-[-5rem] sm:top-[-0.4rem] sm:me-0 sm:h-16 sm:w-16 rounded-full border-2 border-[#8b5e3c]"
+      />
+      <!-- 修改标题为手写字体风格 -->
+      <span class="text-xl font-[Yuanti] text-[#6e422e] sm:text-2xl">
+        夏目の小窝
+        <span class="block text-sm text-[#8b5e3c]">Natsume's Sanctuary</span>
+      </span>
+    </a>
+
+    <!-- 主导航菜单，添加和风样式 -->
+    <nav
+      aria-label="Main menu"
+      class="absolute -inset-x-4 top-14 hidden flex-col items-end gap-y-4 rounded-lg bg-[#fff9f0] py-4 text-[#6e422e] shadow-md backdrop-blur group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:items-center sm:gap-x-6 sm:rounded-none sm:bg-transparent sm:py-0 sm:shadow-none sm:backdrop-blur-none"
+      id="navigation-menu"
+    >
+      {menuLinks.map((link) => (
+        <a
+          aria-current={Astro.url.pathname === link.path ? "page" : false}
+          class="px-4 py-2 font-medium hover:text-[#d87a3d] transition-colors relative group sm:py-0"
+          data-astro-prefetch
+          href={link.path}
+        >
+          {link.title}
+          <!-- 添加下划线动画 -->
+          <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#d87a3d] transition-all group-hover:w-full"></span>
+        </a>
+      ))}
+    </nav>
+  </div>
+
+  <!-- 搜索框和主题切换 -->
+  <div class="flex items-center gap-4 ml-auto">
+    <Search />
+    <ThemeToggle />
+  </div>
+
+  <!-- 移动端菜单按钮，添加和风样式 -->
+  <mobile-button>
+    <button
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="打开主菜单"
+      class="group relative ms-4 h-9 w-9 rounded-full bg-[#f5e6d3] hover:bg-[#8b5e3c] transition-colors sm:hidden"
+      id="toggle-navigation-menu"
+      type="button"
+    >
+      <!-- 修改图标颜色为主题色 -->
+      <svg
+        aria-hidden="true"
+        class="absolute start-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 transition-all text-[#6e422e] group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" />
+      </svg>
+      <svg
+        aria-hidden="true"
+        class="absolute start-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all text-[#fff9f0] group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" />
+      </svg>
+    </button>
+  </mobile-button>
 </header>
 
 <script>
-	import { toggleClass } from "@/utils/domElement";
+  /**
+   * 移动端导航菜单交互逻辑
+   * 添加了动画过渡效果
+   */
+  import { toggleClass } from "@/utils/domElement";
 
-	class MobileNavBtn extends HTMLElement {
-		#menuOpen: boolean = false;
+  class MobileNavBtn extends HTMLElement {
+    #menuOpen = false;
 
-		connectedCallback() {
-			const headerEl = document.getElementById("main-header")!;
-			const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
+    connectedCallback() {
+      const headerEl = document.getElementById("main-header");
+      const mobileButtonEl = this.querySelector("button");
 
-			mobileButtonEl?.addEventListener("click", () => {
-				if (headerEl) toggleClass(headerEl, "menu-open");
-				this.#menuOpen = !this.#menuOpen;
-				mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
-			});
-		}
-	}
+      const toggleMenu = () => {
+        if (headerEl) {
+          toggleClass(headerEl, "menu-open");
+          // 添加菜单展开动画
+          const navMenu = headerEl.querySelector("#navigation-menu");
+          if (this.#menuOpen) {
+            navMenu.style.animation = "slideUp 0.3s ease-out";
+          } else {
+            navMenu.style.animation = "slideDown 0.3s ease-out";
+          }
+        }
+        this.#menuOpen = !this.#menuOpen;
+        mobileButtonEl?.setAttribute("aria-expanded", this.#menuOpen.toString());
+      };
 
-	customElements.define("mobile-button", MobileNavBtn);
+      mobileButtonEl?.addEventListener("click", toggleMenu);
+    }
+  }
+
+  customElements.define("mobile-button", MobileNavBtn);
 </script>
+
+<style lang="css">
+  /** 添加和风动画效果 */
+  @keyframes slideDown {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+  }
+
+  /* 手写字体设置 */
+  .font-Yuanti {
+    font-family: 'Yuanti SC', '游明朝', 'YuMincho', serif;
+  }
+</style>
