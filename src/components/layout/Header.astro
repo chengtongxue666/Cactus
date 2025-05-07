@@ -1,129 +1,213 @@
 ---
+// 导入组件和配置
 import Search from "@/components/Search.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { menuLinks } from "@/site.config";
 ---
 
 <style lang="postcss">
-.header-link {
-  @apply relative px-4 py-2 transition-colors duration-200 hover:text-accent;
+/* 蓝白配色方案 */
+:root {
+  --primary-color: #1e3a8a;    /* 主蓝色 */
+  --secondary-color: #93c5fd;  /* 辅助浅蓝 */
+  --bg-color: #ffffff;         /* 背景白色 */
+  --text-color: #1e293b;       /* 主要文字颜色 */
+}
 
+/* 头部整体样式 */
+.header {
+  @apply sticky top-0 z-50 flex h-16 items-center justify-between bg-[var(--bg-color)] px-4 shadow-sm backdrop-blur-md sm:px-8;
+  
+  /* 毛玻璃效果 */
+  background: rgba(255, 255, 255, 0.86);
+}
+
+/* 导航链接通用样式 */
+.nav-link {
+  @apply relative px-4 py-2 text-[var(--text-color)] transition-colors duration-200;
+  
+  /* 下划线动画 */
   &::after {
-    @apply absolute bottom-0 left-1/2 h-[2px] w-0 bg-accent transition-all duration-300 content-[''];
+    @apply absolute bottom-0 left-1/2 h-[2px] w-0 bg-[var(--primary-color)] transition-all duration-300 content-[''];
+  }
+  
+  &:hover {
+    @apply text-[var(--primary-color)];
+    
+    &::after {
+      @apply left-0 w-full;
+    }
   }
 
-  &:hover::after {
-    @apply left-0 w-full;
-  }
-
+  /* 当前页面高亮 */
   &[aria-current='page'] {
-    @apply text-accent font-semibold;
-
+    @apply font-semibold text-[var(--primary-color)];
+    
     &::after {
       @apply left-0 w-full;
     }
   }
 }
 
+/* Logo样式 */
 .logo {
-  @apply transition-transform duration-300 hover:scale-110;
+  @apply inline-flex items-center gap-3 transition-transform duration-300 hover:scale-105;
+  
+  img {
+    @apply h-10 w-10 rounded-full border-2 border-[var(--primary-color)] sm:h-12 sm:w-12;
+  }
+  
+  span {
+    @apply text-xl font-bold text-[var(--primary-color)] sm:text-2xl;
+  }
 }
 
+/* 移动菜单样式 */
 .mobile-menu {
-  @apply fixed inset-0 z-40 flex flex-col items-center justify-center bg-bgColor/95 backdrop-blur-lg transition-all duration-300 ease-out;
+  @apply fixed inset-0 z-40 flex flex-col items-center justify-center bg-[var(--bg-color)]/95 backdrop-blur-lg transition-all duration-300 ease-out;
+  
+  /* 打开状态 */
+  &.open {
+    @apply opacity-100 translate-y-0;
+  }
+  
+  /* 关闭状态 */
+  &:not(.open) {
+    @apply opacity-0 -translate-y-full;
+  }
+}
+
+/* 移动端菜单按钮 */
+.menu-toggle {
+  @apply relative h-8 w-8 rounded-lg p-1 hover:bg-[var(--secondary-color)]/10;
+  
+  .line {
+    @apply absolute left-1/2 top-1/2 h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-[var(--primary-color)] transition-all duration-300;
+    
+    &:first-child {
+      @apply -translate-y-2;
+    }
+    
+    &:last-child {
+      @apply translate-y-2;
+    }
+  }
+  
+  &[aria-expanded="true"] .line {
+    &:first-child {
+      @apply rotate-45 translate-y-0;
+    }
+    &:last-child {
+      @apply -rotate-45 translate-y-0;
+    }
+  }
 }
 </style>
 
-<header class="group sticky top-0 z-50 mb-16 flex h-16 items-center justify-between bg-bgColor/80 px-4 backdrop-blur-md sm:px-8">
+<!-- 头部主结构 -->
+<header class="header">
+  <!-- 左侧区域：Logo + 桌面导航 -->
   <div class="flex items-center gap-8">
-    <!-- Logo -->
-    <a
-      href="/"
-      class="logo inline-flex items-center gap-3"
-      aria-current={Astro.url.pathname === "/" ? "page" : false}
-    >
+    <!-- Logo链接 -->
+    <a href="/" class="logo" aria-current={Astro.url.pathname === "/" ? "page" : false}>
       <img
         src="/logo256.avif"
         alt="猫&小窝 Logo"
-        class="h-10 w-10 rounded-full border-2 border-accent sm:h-12 sm:w-12"
+        class="logo-img"
       />
-      <span class="text-xl font-bold text-accent sm:text-2xl">猫&小窝</span>
+      <span>猫&小窝</span>
     </a>
 
-    <!-- Desktop Navigation -->
-    <nav
-      aria-label="Main menu"
-      class="hidden items-center divide-x divide-accent/30 sm:flex"
-    >
-      {
-        menuLinks.map((link) => (
-          <a
-            href={link.path}
-            class="header-link"
-            aria-current={Astro.url.pathname === link.path ? "page" : false}
-            data-astro-prefetch
-          >
-            {link.title}
-          </a>
-        ))
-      }
+    <!-- 桌面导航（大屏显示） -->
+    <nav aria-label="Main menu" class="hidden sm:flex items-center divide-x divide-[var(--secondary-color)]">
+      {menuLinks.map((link) => (
+        <a
+          href={link.path}
+          class="nav-link"
+          aria-current={Astro.url.pathname === link.path ? "page" : false}
+          data-astro-prefetch
+        >
+          {link.title}
+        </a>
+      ))}
     </nav>
   </div>
 
+  <!-- 右侧区域：搜索 + 主题切换 + 移动菜单按钮 -->
   <div class="flex items-center gap-4">
     <Search />
     <ThemeToggle />
     
-    <!-- Mobile Toggle Button -->
+    <!-- 移动菜单按钮（小屏显示） -->
     <mobile-button class="sm:hidden">
       <button
         id="toggle-navigation-menu"
         type="button"
-        aria-label="Toggle navigation menu"
-        class="relative h-8 w-8 rounded-lg p-1 hover:bg-accent/10"
+        aria-label="切换导航菜单"
+        class="menu-toggle"
       >
-        <div class="absolute h-full w-full">
-          <div class="absolute left-1/2 top-1/2 h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent transition-all duration-300 group-aria-expanded:rotate-45"></div>
-          <div class="absolute left-1/2 top-1/2 h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent transition-all duration-300 group-aria-expanded:-rotate-45"></div>
-        </div>
+        <div class="line"></div>
+        <div class="line"></div>
       </button>
     </mobile-button>
   </div>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu opacity-0 -translate-y-full group-[.menu-open]:opacity-100 group-[.menu-open]:translate-y-0 sm:hidden">
+  <!-- 移动端导航菜单（小屏显示） -->
+  <div id="mobile-menu" class="mobile-menu">
     <nav class="flex flex-col items-center gap-8 text-xl">
-      {
-        menuLinks.map((link) => (
-          <a
-            href={link.path}
-            class="header-link"
-            aria-current={Astro.url.pathname === link.path ? "page" : false}
-            data-astro-prefetch
-          >
-            {link.title}
-          </a>
-        ))
-      }
+      {menuLinks.map((link) => (
+        <a
+          href={link.path}
+          class="nav-link"
+          aria-current={Astro.url.pathname === link.path ? "page" : false}
+          data-astro-prefetch
+        >
+          {link.title}
+        </a>
+      ))}
     </nav>
   </div>
 </header>
 
 <script>
-  class MobileNavBtn extends HTMLElement {
-    connectedCallback() {
-      const button = this.querySelector('button');
-      const header = document.getElementById('main-header');
+/**
+ * 移动端菜单控制逻辑
+ * 功能：
+ * 1. 切换菜单显示/隐藏
+ * 2. 切换按钮动画
+ * 3. 禁用页面滚动
+ */
+class MobileNavBtn extends HTMLElement {
+  connectedCallback() {
+    // 获取相关元素
+    const button = this.querySelector('button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    button?.addEventListener('click', () => {
+      // 切换菜单状态
+      const isOpen = mobileMenu.classList.toggle('open');
       
-      button?.addEventListener('click', () => {
-        const isOpen = header.classList.toggle('menu-open');
-        button.setAttribute('aria-expanded', isOpen.toString());
-        
-        // 禁用页面滚动
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-      });
-    }
+      // 更新按钮属性
+      button.setAttribute('aria-expanded', isOpen.toString());
+      
+      // 控制页面滚动
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      
+      // 更新按钮动画
+      button.classList.toggle('active', isOpen);
+    });
+    
+    // 点击菜单外区域关闭菜单
+    document.addEventListener('click', (e) => {
+      if (!this.contains(e.target) {
+        mobileMenu.classList.remove('open');
+        button?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
   }
+}
 
-  customElements.define('mobile-button', MobileNavBtn);
+// 注册自定义元素
+customElements.define('mobile-button', MobileNavBtn);
 </script>
