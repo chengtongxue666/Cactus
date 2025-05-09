@@ -32,11 +32,11 @@ export const menuLinks: { path: string; title: string }[] = [
 	},
 	{
 		path: "/about/",
-		title: "关于",
+		title: "关于我",
 	},
 	{
 		path: "/posts/",
-		title: "博客",
+		title: "文章",
 	},
 	{
 		path: "/notes/",
