@@ -44,8 +44,6 @@ export const menuLinks: { path: string; title: string }[] = [
 	},
 ];
 
-
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=0&id=3224918761&auto=1&height=32"></iframe>
 // https://expressive-code.com/reference/configuration/
 export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
 	styleOverrides: {
